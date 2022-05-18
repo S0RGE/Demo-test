@@ -29,9 +29,32 @@ $this->params['breadcrumbs'][] = $this->title;
             'status.name',
 //            'rejection_reason:ntext',
             [
+
                 'label' => 'Количество товаров',
                 'value' => function ($data) {
                     return count($data->productOrders);
+                }
+            ],
+            [
+
+                'label' => 'Количество товаров',
+                'value' => function ($data) {
+                    $productCount = 0;
+                    foreach ($data->productOrders as $item){
+                        $productCount +=$item->count;
+                    }
+                    return $productCount;
+                }
+            ],
+            [
+                'label' => 'Список товаров',
+                'format' => 'html',
+                'value' => function ($data) {
+                    $res = [];
+                    foreach ($data->productOrders as $item) {
+                        $res[] = $item->product->name.":".$item->count."штук";
+                    }
+                    return join('<br>', $res);
                 }
             ],
             ['class' => 'yii\grid\ActionColumn'],
